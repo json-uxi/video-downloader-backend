@@ -26,13 +26,14 @@ app.post('/api/download', (req, res) => {
         try {
             const info = JSON.parse(stdout);
             const formats = info.formats
-                .filter(f => f.ext === 'mp4' && f.url)
-                .map(f => ({
-                    quality: f.format_note || f.height + 'p',
-                    format: f.ext,
-                    url: f.url
-                }));
-
+  const formats = info.formats
+  .filter(f => f.ext === 'mp4' && f.url && f.height)
+  .sort((a, b) => b.height - a.height) // High to low
+  .map(f => ({
+    quality: f.format_note || `${f.height}p`,
+    format: f.ext,
+    url: f.url
+  }));
             const bestThumbnail = info.thumbnails?.[info.thumbnails.length - 1]?.url || '';
 
             return res.json({
