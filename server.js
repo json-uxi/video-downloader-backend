@@ -14,7 +14,8 @@ app.post('/api/download', (req, res) => {
         return res.status(400).json({ error: 'No URL provided' });
     }
 
-    const cmd = `yt-dlp -j "${videoUrl}"`;
+    const cmd = `yt-dlp --cookies ig_cookies.txt -j "${videoUrl}"`;
+
 
     exec(cmd, (error, stdout, stderr) => {
         if (error) {
